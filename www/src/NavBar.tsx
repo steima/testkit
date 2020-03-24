@@ -58,7 +58,7 @@ export class NavBar extends React.Component<NavBarProps, NavBarState> {
                         </Hidden>
                     </div>
                     <div>
-                        <Button color="inherit" onClick={() => { document.location.href = 'https://app.loupe.link/' }} size="large">{ messages.menuLogin }</Button>
+                        <Button color="inherit" onClick={() => { document.location.href = 'https://app.testkit.link/' }} size="large">{ messages.menuLogin }</Button>
                     </div>
                 </Toolbar>
             </AppBar>

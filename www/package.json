@@ -6,24 +6,22 @@
   "scripts": {
     "build": "webpack --mode=production --bail",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "webpack-dev-server",
-    "cypress:open": "cypress open"
+    "dev": "webpack-dev-server"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/steima/loupe_app.git"
+    "url": "git+https://github.com/steima/testkit.git"
   },
   "author": "",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/steima/loupe_app/issues"
+    "url": "https://github.com/steima/testkit/issues"
   },
-  "homepage": "https://github.com/steima/loupe_app#readme",
+  "homepage": "https://github.com/steima/testkit#readme",
   "devDependencies": {
     "@types/luxon": "^1.15.2",
     "@types/react": "^16.9.0",
     "@types/react-dom": "^16.8.5",
-    "cypress": "^3.8.0",
     "install": "^0.13.0",
     "npm": "^6.11.2",
     "source-map-loader": "^0.2.4",

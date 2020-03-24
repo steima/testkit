@@ -1,0 +1,40 @@
+service:
+  name: testkit-resources
+#app: your-app-name
+#tenant: your-tenant-name
+
+plugins:
+  - serverless-webpack
+  - serverless-domain-manager
+
+custom:
+  stage: ${opt:stage, self:provider.stage}
+  customDomain:
+    domainName: api-${self:custom.stage}.testkit.link
+    certificateName: 'testkit.link'
+    basePath: 'resources-init-no-services'
+    stage: ${self:custom.stage}
+    createRoute53Record: true
+
+provider:
+  name: aws
+  region: eu-west-1
+  endpointType: regional
+  runtime: nodejs10.x
+  profile: testkit-serverless-admin
+  environment:
+    stage: ${self:custom.stage}
+  # iamRoleStatements: ${file(../common/common.yml)}
+
+resources:
+  - ${file(dynamodb/tables.yml)}
+
+functions:
+  dummy:
+    handler: api.dummy
+    events:
+      - http:
+          method: get
+          path: dummy
+          cors:
+            origin: '*'

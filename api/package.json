@@ -1,0 +1,29 @@
+{
+  "name": "testkit",
+  "version": "1.0.0",
+  "description": "Serverless webpack example using Typescript",
+  "main": "handler.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "@types/luxon": "^1.21.0",
+    "@types/node": "^10.12.18",
+    "aws-sdk": "^2.638.0",
+    "https": "^1.0.0",
+    "luxon": "^1.21.3",
+    "rss-parser": "^3.7.6",
+    "serverless-domain-manager": "^3.3.1",
+    "serverless-webpack": "^5.3.1",
+    "source-map-support": "^0.5.10",
+    "ts-loader": "^5.3.3",
+    "typescript": "^3.2.4",
+    "uuid": "^3.3.2",
+    "webpack": "^4.29.0"
+  },
+  "author": "The serverless webpack authors (https://github.com/elastic-coders/serverless-webpack)",
+  "license": "MIT",
+  "devDependencies": {
+    "@types/aws-lambda": "^8.10.46"
+  }
+}
