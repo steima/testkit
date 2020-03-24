@@ -1,0 +1,26 @@
+version: 0.2
+
+phases:
+  install:
+    runtime-versions:
+      nodejs: 10
+    commands:
+      # - chmod +x ./app/deploy.sh
+      # - cd app ; npm install ; cd ..
+      - chmod +x ./www/deploy.sh
+      - cd www ; npm install ; cd ..
+  build:
+    commands:
+      # - cd app ; npm run build ; cd ..
+      - cd www ; npm run build ; cd ..
+  post_build:
+    commands:
+      # - cp -r ./app/public ./app/output
+      # - cp -r ./app/dist ./app/output/
+      # - ./app/deploy.sh
+      - cp -r ./www/public ./www/output
+      - cp -r ./www/dist ./www/output/
+      - ./www/deploy.sh
+cache:
+  paths:
+    - /root/.npm/**/*
