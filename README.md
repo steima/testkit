@@ -1,4 +1,4 @@
-# testkit.link
+# testkit
 
 Here I am building a social network app which allows you to track Corvid-19 spread in your social network aka 
 social network analysts' attempt in helping fight the Corvid-19 virus.
@@ -11,7 +11,7 @@ Possible options will be:
 
  - Unknown (not tested)
  - Negative and last test date
- - Postitive and last test date
+ - Positive and last test date
  
 Users are then able to "Tinder-swipe" through their friends list and by doing so marking whether they have met people
 from their social network in the past 14 days. As an alternative users can mark others as:
