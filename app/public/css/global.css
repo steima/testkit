@@ -1,0 +1,72 @@
+div.hero {
+    background-image: url('/img/georg-eiermann-Z4u4o-DhEzw-unsplash.jpg');
+    background-size: cover;
+    background-position: center;
+    height: 100%;
+    min-height: 60vh;
+    width: 100%;
+}
+
+div.readingHeight {
+    height: 75%;
+}
+
+html,
+body {
+    height: 100%;
+}
+
+div#content {
+    min-height: 100%;
+    height: 100%;
+}
+
+div.rdw-option-wrapper[title="Strikethrough"],
+div.rdw-option-wrapper[title="Monospace"],
+div.rdw-option-wrapper[title="Superscript"],
+div.rdw-option-wrapper[title="Subscript"],
+div.rdw-option-wrapper[title="Indent"],
+div.rdw-option-wrapper[title="Outdent"],
+div.rdw-fontfamily-wrapper,
+div.rdw-embedded-wrapper,
+div.rdw-image-wrapper,
+div.rdw-remove-wrapper,
+div.rdw-history-wrapper,
+div.rdw-colorpicker-wrapper
+{
+    display: none;
+}
+
+div.rdw-editor-toolbar {
+    border: none;
+    padding-left: 0px;
+    padding-right: 0px;
+}
+
+body.loading {
+    margin: 0px;
+    padding: 0px;
+}
+
+div.loading {
+    margin-top: 30vh;
+    margin-left: 2vw;
+    margin-right: 2vw;
+    border-radius: 3px;
+    padding: 1em;
+    text-align: center;
+    color: #FFFFFF;
+    background-color: rgba(100, 100, 100, 0.9);
+    font-family: "Roboto", "Helvetica", "Arial", sans-serif;
+    font-weight: 400;
+    line-height: 1.17;
+    letter-spacing: 0.00735em;
+}
+
+div.crisp-rendering {
+    image-rendering: crisp-edges;
+    image-rendering: -moz-crisp-edges;          /* Firefox */
+    image-rendering: -o-crisp-edges;            /* Opera */
+    image-rendering: -webkit-optimize-contrast; /* Webkit (non-standard naming)*/
+    -ms-interpolation-mode: nearest-neighbor;
+}
