@@ -20,3 +20,10 @@ export interface TestkitUser {
     currentCondition: Condition;
 
 }
+
+export interface UpdateConditionRequest {
+    condition: Condition;
+    swabTakenAt?: DateTime;
+    testResultsAt?: DateTime;
+    labName?: string;
+}

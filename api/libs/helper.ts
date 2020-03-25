@@ -29,6 +29,10 @@ export function luxonDate(date?: any): DateTime {
     throw Error('Date was in a not supported type')
 }
 
+export function nowIsoString(): string {
+    return new Date().toISOString();
+}
+
 export function hasKey<O>(obj: O, key: keyof any): key is keyof O {
     return key in obj
 }

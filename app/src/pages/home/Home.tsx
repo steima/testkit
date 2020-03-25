@@ -4,7 +4,7 @@ import {
     Box,
     Button,
     Container,
-    Grid, Paper,
+    Grid, IconButton, Paper,
     Typography,
 } from "@material-ui/core";
 import {ImprintFooter} from "../../components/footer/ImprintFooter";
@@ -12,6 +12,8 @@ import {authStore} from "../../stores/authStore";
 import {observer} from "mobx-react";
 import {UsersProvider} from "../../provider/UsersProvider";
 import {TestkitUser} from "../../domain";
+import {Edit} from "@material-ui/icons";
+import {UpdateConditionDialog} from "./UpdateConditionDialog";
 
 interface HomeProps extends RouteComponentProps<{}> {
 }
@@ -42,8 +44,9 @@ interface HeroProps {
 }
 
 interface HeroState {
-    loggedIn: boolean
-    currentUser?: TestkitUser
+    loggedIn: boolean,
+    currentUser?: TestkitUser,
+    editCondition: boolean
 }
 
 @observer
@@ -53,7 +56,8 @@ class Hero extends React.Component<HeroProps, HeroState> {
         super(props);
         this.state = {
             loggedIn: false,
-            currentUser: undefined
+            currentUser: undefined,
+            editCondition: false
         };
     }
 
@@ -67,6 +71,10 @@ class Hero extends React.Component<HeroProps, HeroState> {
         UsersProvider.getCurrentUser().then((u) => {
             this.setState({currentUser: u});
         })
+    }
+
+    private editCondition(edit: boolean) {
+        this.setState({editCondition: edit});
     }
 
     render() {
@@ -87,6 +95,9 @@ class Hero extends React.Component<HeroProps, HeroState> {
                                             <Typography variant="body2">
                                                 { this.state.currentUser.currentCondition }
                                             </Typography>
+                                            <IconButton onClick={(e) => { this.editCondition(true); }}>
+                                                <Edit />
+                                            </IconButton>
                                         </Grid>
                                     </Grid>
                                 }
@@ -94,6 +105,16 @@ class Hero extends React.Component<HeroProps, HeroState> {
                         </Paper>
                     </Box>
                 </Container>
+                <UpdateConditionDialog open={this.state.editCondition} onClose={(user?: TestkitUser) => {
+                    if(user) {
+                        this.setState({
+                            currentUser: user,
+                            editCondition: false
+                        });
+                    }else{
+                        this.editCondition(false);
+                    }
+                }} />
             </div>
         );
     }

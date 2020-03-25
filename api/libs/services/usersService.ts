@@ -1,7 +1,9 @@
 import {usersRepository} from "../repositories/usersRepository";
-import {TestkitUser, userBlueprint} from "../domain/user";
+import {ConditionLog, TestkitUser, userBlueprint} from "../domain/user";
 import {AuthInfo} from "./authService";
 import {httpGet} from "./httpsService";
+import {UpdateConditionRequest} from "../../services/testkit-api/resources";
+import {nowIsoString} from "../helper";
 
 class UsersService {
 
@@ -21,6 +23,23 @@ class UsersService {
 
     public async createUser(userId: string, name: string): Promise<TestkitUser> {
         const user = userBlueprint(userId, name);
+        return usersRepository.put(user);
+    }
+
+    public async updateCondition(userid: string, request: UpdateConditionRequest): Promise<TestkitUser> {
+        const user = await usersRepository.get(userid);
+        user.currentCondition = request.condition;
+        const conditionLog: ConditionLog = {
+            condition: request.condition,
+            submittedAt: nowIsoString(),
+            swabTakenAt: request.swabTakenAt,
+            testResultsAt: request.testResultsAt,
+            labName: request.labName
+        };
+        if(user.conditionLogs == undefined) {
+            user.conditionLogs = [];
+        }
+        user.conditionLogs.push(conditionLog);
         return usersRepository.put(user);
     }
 

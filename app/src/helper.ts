@@ -29,6 +29,18 @@ export function luxonDate(date?: any): DateTime {
     throw Error('Date was in a not supported type')
 }
 
+export function luxonDateOrUndefined(date?: any): DateTime | undefined {
+    if(!date) return undefined;
+    return luxonDate(date);
+}
+
+export function isoDate(date?: DateTime): string | undefined {
+    if(date) {
+        return date.toJSDate().toISOString();
+    }
+    return undefined;
+}
+
 export function hasKey<O>(obj: O, key: keyof any): key is keyof O {
     return key in obj
 }

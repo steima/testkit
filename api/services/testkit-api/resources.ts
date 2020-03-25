@@ -1,15 +1,8 @@
-export enum RecurrencePattern {
-    Weekly = "Weekly",
-    BiWeekly = "BiWeekly",
-    Monthly = "Monthly"
-}
+import {Condition} from "../../libs/domain/user";
 
-export interface CreateAppointmentSeries {
-    startDate: string;
-    duration: number;
-    recurrencePattern: RecurrencePattern;
-    numberRecurrences: number;
-    subject?: string;
-    description?: string;
-    room?: string;
+export interface UpdateConditionRequest {
+    condition: Condition;
+    swabTakenAt?: string;
+    testResultsAt?: string;
+    labName?: string;
 }

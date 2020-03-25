@@ -43,3 +43,13 @@ functions:
           cors:
             origin: '*'
           authorizer: auth
+  update-condition:
+    handler: api.updateCondition
+    events:
+      - http:
+          method: post
+          path: 'update-condition'
+          cors:
+            origin: '*'
+          authorizer: auth
+

@@ -1,3 +1,5 @@
+import {nowIsoString} from "../helper";
+
 export enum Condition {
     Unknown = "Unknown",
     Positive =  "Positive",
@@ -6,7 +8,10 @@ export enum Condition {
 
 export interface ConditionLog {
     condition: Condition;
-    submitted: string;
+    submittedAt: string;
+    swabTakenAt?: string;
+    testResultsAt?: string;
+    labName?: string;
 }
 
 export interface TestkitUser {
@@ -16,6 +21,7 @@ export interface TestkitUser {
     name?: string;
 
     currentCondition: Condition;
+
     conditionLogs: ConditionLog[];
 
 }
@@ -23,7 +29,7 @@ export interface TestkitUser {
 export function userBlueprint(userid: string, name: string): TestkitUser {
     return {
         userid: userid,
-        imported: new Date().toISOString(),
+        imported: nowIsoString(),
         name: name,
         currentCondition: Condition.Unknown,
         conditionLogs: []
