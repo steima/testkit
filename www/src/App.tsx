@@ -11,6 +11,7 @@ import { uiStateStore } from "./stores/uiStateStore";
 import LuxonUtils from "@date-io/luxon";
 import {MuiPickersUtilsProvider} from "@material-ui/pickers";
 import {ErrorSnackbarComponent} from "./ErrorSnackbarComponent";
+import {Privacy} from "./pages/privacy/Privacy";
 
 function NoMatch() {
     return <h2>Not Found</h2>;
@@ -29,6 +30,7 @@ export class App extends React.Component<{}, {}> {
                             <NavBar />
                             <Switch>
                                 <Route path="/" exact component={Home} />
+                                <Route path="/privacy" exact component={Privacy} />
                                 <Route component={NoMatch} />
                             </Switch>
                             <Box marginBottom={3} />

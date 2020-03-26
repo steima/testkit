@@ -14,7 +14,8 @@ const en = {
     download: 'Download',
     menuLogin: 'Login',
     brandOfMatthiasSteinbauer: 'This is a service run by Matthias Steinbauer',
-    imprint: 'Imprint'
+    imprint: 'Imprint',
+    titlePrivacy: 'Privacy Policy'
 };
 
 const de = {
@@ -31,7 +32,8 @@ const de = {
     download: 'Herunterladen',
     menuLogin: 'Login',
     brandOfMatthiasSteinbauer: 'Dieses Service wird von Matthias Steinbauer betrieben',
-    imprint: 'Impressum'
+    imprint: 'Impressum',
+    titlePrivacy: 'Datenschutzrichtlinie'
 };
 const i18n = {
     en: en,
