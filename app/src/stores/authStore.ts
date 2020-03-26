@@ -54,7 +54,7 @@ class AuthStore {
 
     logout() {
         localStorage.removeItem(TOKEN_NAME);
-        uiStateStore.navigate('/');
+        uiStateStore.navigate('/login');
     }
 }
 

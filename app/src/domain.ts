@@ -27,3 +27,21 @@ export interface UpdateConditionRequest {
     testResultsAt?: DateTime;
     labName?: string;
 }
+
+export interface FacebookFriend {
+    name: string,
+    id: string
+}
+
+export interface FacebookFriendListPage {
+    data: FacebookFriend[],
+    paging: {
+        cursors: {
+            before: string,
+            after: string
+        }
+    },
+    summary: {
+        total_count: number
+    }
+}

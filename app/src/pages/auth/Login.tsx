@@ -12,6 +12,10 @@ interface LoginState {
     processing: boolean
 }
 
+interface ReactFacebookResponse extends ReactFacebookLoginInfo {
+    status?: string;
+}
+
 export class Login extends React.Component<LoginProps, LoginState> {
 
     constructor(props: LoginProps) {
@@ -19,10 +23,18 @@ export class Login extends React.Component<LoginProps, LoginState> {
         this.state = { processing: false };
     }
 
-    private processToken(response: ReactFacebookLoginInfo) {
-        authStore.processToken(response).then(() => {
-            uiStateStore.navigate('/home');
-        });
+    componentDidMount(): void {
+        this.state = { processing: false };
+    }
+
+    private processToken(response: ReactFacebookResponse) {
+        if(response.status == "unknown") {
+            this.setState({ processing: false });
+        }else{
+            authStore.processToken(response).then(() => {
+                uiStateStore.navigate('/home');
+            });
+        }
     }
 
     render() {

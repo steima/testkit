@@ -47,6 +47,9 @@ export class Api {
     }
 
     static buildUrl(path: string) {
+        if(path.startsWith('http://') || path.startsWith('https://')) {
+            return path;
+        }
         if(!path.startsWith('/')) {
             path = '/' + path;
         }
