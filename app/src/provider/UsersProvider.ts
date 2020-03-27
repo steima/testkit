@@ -1,12 +1,17 @@
 import {Api} from "./api";
 import {Condition, TestkitUser, UpdateConditionRequest} from "../domain";
 import {isoDate, luxonDate} from "../helper";
+import {authStore} from "../stores/authStore";
 
 export class UsersProvider {
 
     static async getCurrentUser(): Promise<TestkitUser> {
         return Api.GET<{ userid: string, name: string, imported: string, currentCondition: Condition }>('/users/current').then((response) => {
             return mapUserResponse(response);
+        }).catch((error) => {
+            console.log(error);
+            authStore.logout();
+            throw new Error(error);
         });
     }
 
