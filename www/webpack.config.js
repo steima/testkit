@@ -53,7 +53,7 @@ module.exports = {
         historyApiFallback: true,
         watchOptions: {
             ignored: [
-                    path.resolve(__dirname, 'node_modules'),
+                    /node_modules/,
                     path.resolve(__dirname, 'dist')
                 ]
         }
