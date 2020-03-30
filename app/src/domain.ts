@@ -45,3 +45,10 @@ export interface FacebookFriendListPage {
         total_count: number
     }
 }
+
+export interface Contact {
+    from: string;
+    to: string;
+    lastMetAt: DateTime;
+    meetingLog: DateTime[];
+}

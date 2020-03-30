@@ -1,7 +1,8 @@
 import {Api} from "./api";
-import {Condition, TestkitUser, UpdateConditionRequest} from "../domain";
+import {Condition, Contact, TestkitUser, UpdateConditionRequest} from "../domain";
 import {isoDate, luxonDate} from "../helper";
 import {authStore} from "../stores/authStore";
+import {DateTime} from "luxon";
 
 export class UsersProvider {
 
@@ -27,13 +28,32 @@ export class UsersProvider {
         });
     }
 
+    static async storeSocialContact(otherUser: string, lastMetAt?: DateTime): Promise<Contact> {
+        const request = {
+            otherUser: otherUser,
+            lastMetAt: lastMetAt || luxonDate()
+        };
+        return Api.POST<{ from: string, to: string, lastMetAt: string, meetingLog: string[] }>('/users/store-social-contact', request).then((response) => {
+            return mapContactResponse(response);
+        });
+    }
+
 }
 
-function mapUserResponse(response: { userid: string, name: string, imported: string, currentCondition: Condition }) {
+function mapUserResponse(response: { userid: string, name: string, imported: string, currentCondition: Condition }): TestkitUser {
     return {
         userid: response.userid,
         name: response.name,
         imported: luxonDate(response.imported),
         currentCondition: response.currentCondition,
+    };
+}
+
+function mapContactResponse(response: { from: string, to: string, lastMetAt: string, meetingLog: string[] }): Contact {
+    return {
+        from: response.from,
+        to: response.to,
+        lastMetAt: luxonDate(response.lastMetAt),
+        meetingLog: response.meetingLog.map((d) => luxonDate(d))
     };
 }

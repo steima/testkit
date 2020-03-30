@@ -21,3 +21,4 @@
     - dynamodb:DeleteItem
   Resource:
     - 'Fn::ImportValue': ${self:custom.stage}-UsersTableArn
+    - 'Fn::ImportValue': ${self:custom.stage}-ContactsTableArn

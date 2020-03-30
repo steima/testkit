@@ -11,6 +11,22 @@ Resources:
           KeyType: HASH
       # Set the capacity to auto-scale
       BillingMode: PAY_PER_REQUEST
+  ContactsTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      TableName: testkit-${self:custom.stage}-contacts
+      AttributeDefinitions:
+        - AttributeName: from
+          AttributeType: S
+        - AttributeName: to
+          AttributeType: S
+      KeySchema:
+        - AttributeName: from
+          KeyType: HASH
+        - AttributeName: to
+          KeyType: RANGE
+      # Set the capacity to auto-scale
+      BillingMode: PAY_PER_REQUEST
 Outputs:
   UsersTableArn:
     Value:
@@ -19,3 +35,10 @@ Outputs:
         - Arn
     Export:
       Name: ${self:custom.stage}-UsersTableArn
+  ContactsTableArn:
+    Value:
+      Fn::GetAtt:
+        - ContactsTable
+        - Arn
+    Export:
+      Name: ${self:custom.stage}-ContactsTableArn

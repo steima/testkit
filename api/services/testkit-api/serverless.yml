@@ -52,4 +52,31 @@ functions:
           cors:
             origin: '*'
           authorizer: auth
+  compute-score:
+    handler: api.computeScore
+    events:
+      - http:
+          method: get
+          path: 'compute-score'
+          cors:
+            origin: '*'
+          authorizer: auth
+  get-last-met:
+    handler: api.getLastMet
+    events:
+      - http:
+          method: post
+          path: 'get-last-met'
+          cors:
+            origin: '*'
+          authorizer: auth
+  store-social-contact:
+    handler: api.storeSocialContact
+    events:
+      - http:
+          method: post
+          path: 'store-social-contact'
+          cors:
+            origin: '*'
+          authorizer: auth
 

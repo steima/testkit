@@ -2,8 +2,9 @@ import {APIGatewayAuthorizerHandler, APIGatewayProxyHandler, APIGatewayTokenAuth
 import {Responses} from "../../libs/responses";
 import {usersService} from "../../libs/services/usersService";
 import {authService} from "../../libs/services/authService";
-import {UpdateConditionRequest} from "./resources";
+import {Meeting, SocialNetworkScore, SocialNetworkScoreResultType, UpdateConditionRequest} from "./resources";
 import {Requests} from "../../libs/requests";
+import {contactsService} from "../../libs/services/contactsService";
 
 export const auth: APIGatewayAuthorizerHandler = async (event: APIGatewayTokenAuthorizerEvent, _context) => {
     return await authService.verifyEvent(event);
@@ -30,3 +31,27 @@ export const updateCondition: APIGatewayProxyHandler = async (event, _context) =
     const updatedUser = await usersService.updateCondition(authInfo.facebookUserId, request)
     return Responses.success(updatedUser);
 };
+
+export const storeSocialContact: APIGatewayProxyHandler = async (event, _context) => {
+    const authInfo = authService.extractAuthInfo(event);
+    const existingUser = await usersService.getUser(authInfo);
+    if(!existingUser) {
+        return Responses.notFound(`No user found with userid ${authInfo.facebookUserId}`);
+    }
+    const request = <Meeting>Requests.body(event);
+    const contact = await contactsService.recordMeeting({ me: existingUser.userid, ... request });
+    return Responses.success(contact);
+};
+
+export const computeScore: APIGatewayProxyHandler = async (_event, _context) => {
+    const result: SocialNetworkScore = {
+        resultType: SocialNetworkScoreResultType.NotEnoughConnections,
+        positive: 0
+    };
+    return Responses.success(result);
+};
+
+export const getLastMet: APIGatewayProxyHandler = async (_event, _context) => {
+    return Responses.notFound('Not implemented');
+};
+

@@ -3,18 +3,19 @@ import { RouteComponentProps } from "react-router";
 import {
     Box,
     Button, CircularProgress,
-    Container,
-    Grid, IconButton, List, ListItem, ListItemText, Paper,
+    Container, Divider,
+    Grid, IconButton, InputBase, List, ListItem, ListItemSecondaryAction, ListItemText, Paper,
     Typography,
 } from "@material-ui/core";
 import {ImprintFooter} from "../../components/footer/ImprintFooter";
 import {authStore} from "../../stores/authStore";
 import {observer} from "mobx-react";
 import {UsersProvider} from "../../provider/UsersProvider";
-import {FacebookFriend, TestkitUser} from "../../domain";
+import {FacebookFriend, FacebookFriendListPage, TestkitUser} from "../../domain";
 import {Edit} from "@material-ui/icons";
 import {UpdateConditionDialog} from "./UpdateConditionDialog";
 import {FacebookProvider} from "../../provider/FacebookProvider";
+import {messages} from "../../i18n";
 
 interface HomeProps extends RouteComponentProps<{}> {
 }
@@ -46,8 +47,9 @@ interface HeroProps {
 
 interface HeroState {
     currentUser?: TestkitUser,
+    editCondition: boolean,
     friends?: FacebookFriend[],
-    editCondition: boolean
+    friendsSearchNeedle: string
 }
 
 @observer
@@ -59,7 +61,8 @@ class Hero extends React.Component<HeroProps, HeroState> {
         super(props);
         this.state = {
             currentUser: undefined,
-            editCondition: false
+            editCondition: false,
+            friendsSearchNeedle: ''
         };
     }
 
@@ -85,23 +88,45 @@ class Hero extends React.Component<HeroProps, HeroState> {
 
     private loadCurrentUser() {
         UsersProvider.getCurrentUser().then((u) => {
-            this.setState({currentUser: u});
+            this.setState({currentUser: u, friends: []});
         }).then((_u) => {
-            FacebookProvider.listFriends().then((friendsPage) => {
-                this.setState({friends: friendsPage.data});
-            });
+            FacebookProvider.listFriends().then((friendsPage) => this.mergeFriends(friendsPage));
         });
+    }
+
+    private mergeFriends(friendsPage: FacebookFriendListPage) {
+        let currentFriends: FacebookFriend[] = this.state.friends || [];
+        currentFriends.push(... friendsPage.data);
+        this.setState({friends: currentFriends});
+        if(friendsPage.paging && friendsPage.paging.cursors && friendsPage.paging.cursors.after) {
+            FacebookProvider.next(friendsPage).then((friendsPage) => this.mergeFriends(friendsPage));
+        }else{
+            console.log('Done loading friends');
+        }
     }
 
     private editCondition(edit: boolean) {
         this.setState({editCondition: edit});
     }
 
+    private handleFriendsSearchNeedleChange(needle: string) {
+        this.setState({friendsSearchNeedle: needle});
+    }
+
+    private filterFriends(): FacebookFriend[] {
+        const needle = this.state.friendsSearchNeedle.toLowerCase();
+        if(this.state.friends == undefined || this.state.friends.length == 0) {
+            return [];
+        }
+        return this.state.friends.filter((f) => f.name.toLowerCase().indexOf(needle) != -1);
+    }
+
     render() {
         return (
-            <div id="homeBlock" className="hero">
-                <Container>
-                    <Box p={3}>
+            <Container>
+                <Grid container spacing={3}>
+                    <Grid item xs={12}></Grid>
+                    <Grid item xs={12} sm={6} lg={4}>
                         <Paper>
                             <Box p={3}>
                                 { this.state.currentUser == undefined &&
@@ -126,21 +151,54 @@ class Hero extends React.Component<HeroProps, HeroState> {
                                 }
                             </Box>
                         </Paper>
-                    </Box>
-                    { this.state.friends &&
-                        <Box p={3}>
+                    </Grid>
+                    <Grid item xs={12} sm={6} lg={4}>
+                        <Paper>
+                            <Box p={3}>
+                                Dein Netzwerk
+                            </Box>
+                        </Paper>
+                    </Grid>
+                    <Grid item xs={12} sm={6} lg={4}>
+                        { this.state.friends &&
                             <Paper>
-                                <List>
-                                    { this.state.friends.map((f) =>
-                                        <ListItem key={f.id}>
-                                            <ListItemText primary={f.name} />
-                                        </ListItem>
-                                    ) }
-                                </List>
+                                <Box p={1}>
+                                    <Grid container spacing={1}>
+                                        <Grid item xs={12}>
+                                            <Box paddingLeft={2} paddingRight={2}>
+                                                <InputBase
+                                                    fullWidth
+                                                    value={this.state.friendsSearchNeedle}
+                                                    placeholder={ messages.search }
+                                                    onChange={(e) => { this.handleFriendsSearchNeedleChange(e.target.value); }} />
+                                            </Box>
+                                        </Grid>
+                                        <Grid item xs={12}>
+                                            <Divider />
+                                        </Grid>
+                                        <Grid item xs={12}>
+                                            <List>
+                                                { this.filterFriends().map((f) =>
+                                                    <ListItem key={f.id} style={{ cursor: 'pointer' }}
+                                                              onClick={(e) => { UsersProvider.storeSocialContact(f.id); }}
+                                                    >
+                                                        <ListItemText primary={f.name} />
+                                                        <ListItemSecondaryAction>
+                                                            <IconButton edge="end">
+                                                                7
+                                                                <Edit />
+                                                            </IconButton>
+                                                        </ListItemSecondaryAction>
+                                                    </ListItem>
+                                                ) }
+                                            </List>
+                                        </Grid>
+                                    </Grid>
+                                </Box>
                             </Paper>
-                        </Box>
-                    }
-                </Container>
+                        }
+                    </Grid>
+                </Grid>
                 <UpdateConditionDialog open={this.state.editCondition} onClose={(user?: TestkitUser) => {
                     if(user) {
                         this.setState({
@@ -151,20 +209,18 @@ class Hero extends React.Component<HeroProps, HeroState> {
                         this.editCondition(false);
                     }
                 }} />
-            </div>
+            </Container>
         );
     }
 }
 
 function OriginalHome(props: {}) {
     return(
-        <div>
-            <Container>
-                <Grid container spacing={3}>
-                    <Grid item xs={12}><Box p={4} /></Grid>
-                    <ImprintFooter />
-                </Grid>
-            </Container>
-        </div>
+        <Container>
+            <Grid container spacing={3}>
+                <Grid item xs={12}><Box p={4} /></Grid>
+                <ImprintFooter />
+            </Grid>
+        </Container>
     );
 }
