@@ -2,7 +2,11 @@ import {APIGatewayAuthorizerHandler, APIGatewayProxyHandler, APIGatewayTokenAuth
 import {Responses} from "../../libs/responses";
 import {usersService} from "../../libs/services/usersService";
 import {authService} from "../../libs/services/authService";
-import {Meeting, SocialNetworkScore, SocialNetworkScoreResultType, UpdateConditionRequest} from "./resources";
+import {
+    LastMetRequest, LastMetResponse,
+    Meeting,
+    UpdateConditionRequest
+} from "./resources";
 import {Requests} from "../../libs/requests";
 import {contactsService} from "../../libs/services/contactsService";
 
@@ -43,15 +47,27 @@ export const storeSocialContact: APIGatewayProxyHandler = async (event, _context
     return Responses.success(contact);
 };
 
-export const computeScore: APIGatewayProxyHandler = async (_event, _context) => {
-    const result: SocialNetworkScore = {
-        resultType: SocialNetworkScoreResultType.NotEnoughConnections,
-        positive: 0
-    };
+export const computeScore: APIGatewayProxyHandler = async (event, _context) => {
+    const authInfo = authService.extractAuthInfo(event);
+    const existingUser = await usersService.getUser(authInfo);
+    if(!existingUser) {
+        return Responses.notFound(`No user found with userid ${authInfo.facebookUserId}`);
+    }
+    const result = await contactsService.computeNetworkScore(existingUser.userid);
     return Responses.success(result);
 };
 
-export const getLastMet: APIGatewayProxyHandler = async (_event, _context) => {
-    return Responses.notFound('Not implemented');
+export const getLastMet: APIGatewayProxyHandler = async (event, _context) => {
+    const authInfo = authService.extractAuthInfo(event);
+    const existingUser = await usersService.getUser(authInfo);
+    if(!existingUser) {
+        return Responses.notFound(`No user found with userid ${authInfo.facebookUserId}`);
+    }
+    const request = <LastMetRequest>Requests.body(event);
+    const records = await contactsService.computeLastMet(existingUser.userid, request.userIds);
+    const response: LastMetResponse = {
+        data: records
+    };
+    return Responses.success(response);
 };
 

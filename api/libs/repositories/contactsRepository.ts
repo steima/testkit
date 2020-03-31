@@ -28,6 +28,28 @@ class ContactsRepository {
         });
     }
 
+    async listForUser(from: string): Promise<Contact[]> {
+        const p = {
+            TableName: this.tableName,
+            KeyConditionExpression: "#from = :from",
+            ExpressionAttributeNames: {
+                "#from": "from"
+            },
+            ExpressionAttributeValues: {
+                ":from": from
+            },
+            ScanIndexForward: false,
+            Limit: 5000
+        };
+        return this.dynamoDb.query(p).promise().then((r) => {
+            if(r.Items) {
+                return r.Items.map((c) => { return c as Contact; });
+            }else{
+                return Promise.reject();
+            }
+        });
+    }
+
     public async put(contact: Contact): Promise<Contact> {
         const c = {
             TableName: this.tableName,
