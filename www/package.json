@@ -23,7 +23,7 @@
     "@types/react": "^16.9.0",
     "@types/react-dom": "^16.8.5",
     "install": "^0.13.0",
-    "npm": "^6.11.2",
+    "npm": "^6.14.6",
     "source-map-loader": "^0.2.4",
     "ts-loader": "^6.0.4",
     "typescript": "^3.5.3",
