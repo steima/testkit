@@ -9,7 +9,7 @@
   "dependencies": {
     "@types/luxon": "^1.21.0",
     "@types/node": "^10.12.18",
-    "aws-sdk": "^2.638.0",
+    "aws-sdk": "^2.814.0",
     "https": "^1.0.0",
     "luxon": "^1.21.3",
     "rss-parser": "^3.7.6",
